@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: app/views/web/Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    environment:
+      - ENVIRONMENT=development
+    networks:
+      - app-network
+
+  mobile:
+    build:
+      context: .
+      dockerfile: app/views/mobile/Dockerfile
+    volumes:
+      - .:/app
+    environment:
+      - ENVIRONMENT=development
+    networks:
+      - app-network
+    # Note: Mobile app might need additional configuration for display
+    # depending on your specific needs
+
+networks:
+  app-network:
+    driver: bridge 
