@@ -18,9 +18,19 @@ RUN apt-get update && apt-get install -y \
     libavformat-dev \
     libavcodec-dev \
     zlib1g-dev \
+    libgstreamer1.0-dev \
+    gstreamer1.0-plugins-base \
+    gstreamer1.0-plugins-good \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
+
+# Install Kivy dependencies first
+RUN pip install --no-cache-dir kivy_deps.sdl2==0.8.0 \
+    kivy_deps.glew==0.3.1 \
+    kivy_deps.gstreamer==0.3.3
+
+# Then install the rest of the requirements
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
