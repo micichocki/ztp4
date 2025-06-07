@@ -1,7 +1,7 @@
 from kivymd.app import MDApp
 from kivymd.uix.button import MDRaisedButton
 from kivymd.uix.screen import MDScreen
-from kivymd.uix.list import MDList, OneLineListItem, TwoLineListItem
+from kivymd.uix.list import MDList, TwoLineListItem
 from kivymd.uix.card import MDCard
 from kivymd.uix.label import MDLabel
 from kivy.uix.boxlayout import BoxLayout

@@ -1,9 +1,8 @@
-from fastapi import FastAPI, HTTPException, Request, Depends, Response
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 import requests
 import os
-from datetime import datetime
 
 app = FastAPI(
     title="API Gateway",
