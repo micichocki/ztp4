@@ -1,6 +1,21 @@
 version: '3.8'
 
 services:
+
+  api-gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/app
+    environment:
+      - ENVIRONMENT=development
+      - API_ENDPOINT=http://127.0.0.1:5000
+    networks:
+      - app-network
+
   web:
     build:
       context: .
@@ -11,28 +26,14 @@ services:
       - .:/app
     environment:
       - ENVIRONMENT=development
-      - BACKEND_URL=http://host.docker.internal:5000
+      - API_GATEWAY_URL=http://api-gateway:5000
     networks:
       - app-network
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-
-  mobile:
-    build:
-      context: .
-      dockerfile: app/views/mobile/Dockerfile
-    volumes:
-      - .:/app
-      - /tmp/.X11-unix:/tmp/.X11-unix
-    environment:
-      - ENVIRONMENT=development
-      - BACKEND_URL=http://host.docker.internal:5000
-      - DISPLAY=host.docker.internal:0.0
-    networks:
-      - app-network
+    depends_on:
+      - api-gateway
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
 networks:
   app-network:
-    driver: bridge 
+    driver: bridge

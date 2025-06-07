@@ -22,7 +22,6 @@ class ProductViewModel:
         return self._error_message
     
     def load_products(self) -> None:
-        """Load all products from the service"""
         try:
             self._products = self._product_service.get_products()
             self._error_message = ""
@@ -31,7 +30,6 @@ class ProductViewModel:
             self._products = []
     
     def select_product(self, product_id: int) -> None:
-        """Load and select a specific product"""
         try:
             self._selected_product = self._product_service.get_product(product_id)
             self._error_message = ""
