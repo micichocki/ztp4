@@ -7,6 +7,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.scrollview import ScrollView
 from app.viewmodels.product_viewmodel import ProductViewModel
 from app.services.product_service import ProductService
+import os
 
 class ProductListScreen(MDScreen):
     def __init__(self, view_model: ProductViewModel, **kwargs):
@@ -134,8 +135,9 @@ class CrossPlatformApp(MDApp):
         self.theme_cls.primary_palette = "Blue"
         self.theme_cls.theme_style = "Light"
         
-        # Initialize service and view model
-        product_service = ProductService("http://your-backend-url/api")
+        # Initialize service and view model with environment variable
+        backend_url = os.getenv('BACKEND_URL', 'http://127.0.0.1:5000')
+        product_service = ProductService(backend_url)
         view_model = ProductViewModel(product_service)
         
         # Create screens

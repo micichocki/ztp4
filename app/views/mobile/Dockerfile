@@ -2,6 +2,7 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     python3-pip \
     build-essential \
@@ -21,7 +22,11 @@ RUN apt-get update && apt-get install -y \
     libgstreamer1.0-dev \
     gstreamer1.0-plugins-base \
     gstreamer1.0-plugins-good \
+    x11-apps \
     && rm -rf /var/lib/apt/lists/*
+
+# Set display environment variable
+ENV DISPLAY=host.docker.internal:0.0
 
 COPY requirements.txt .
 

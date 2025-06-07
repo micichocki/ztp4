@@ -11,8 +11,11 @@ services:
       - .:/app
     environment:
       - ENVIRONMENT=development
+      - BACKEND_URL=http://host.docker.internal:5000
     networks:
       - app-network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   mobile:
     build:
@@ -20,12 +23,15 @@ services:
       dockerfile: app/views/mobile/Dockerfile
     volumes:
       - .:/app
+      - /tmp/.X11-unix:/tmp/.X11-unix
     environment:
       - ENVIRONMENT=development
+      - BACKEND_URL=http://host.docker.internal:5000
+      - DISPLAY=host.docker.internal:0.0
     networks:
       - app-network
-    # Note: Mobile app might need additional configuration for display
-    # depending on your specific needs
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
 networks:
   app-network:
