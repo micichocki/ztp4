@@ -15,6 +15,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-EXPOSE 5000 8000
+EXPOSE 5001 8000
 
-CMD ["python", "app/main.py"]
+CMD ["python", "app/api_gateway.py"]

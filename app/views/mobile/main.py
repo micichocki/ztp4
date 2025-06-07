@@ -8,7 +8,6 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.screenmanager import ScreenManager
 from app.viewmodels.product_viewmodel import ProductViewModel
-from app.services.product_service import ProductService
 
 class ProductListScreen(MDScreen):
     def __init__(self, view_model: ProductViewModel, **kwargs):
@@ -98,17 +97,17 @@ class ProductDetailsScreen(MDScreen):
         )
         self.details_card.add_widget(self.price_label)
 
-        self.description_label = MDLabel(
+        self.stock_label = MDLabel(
             text="",
             halign="center"
         )
-        self.details_card.add_widget(self.description_label)
+        self.details_card.add_widget(self.stock_label)
 
-        self.quantity_label = MDLabel(
+        self.reserved_label = MDLabel(
             text="",
             halign="center"
         )
-        self.details_card.add_widget(self.quantity_label)
+        self.details_card.add_widget(self.reserved_label)
 
         layout.add_widget(self.details_card)
         self.add_widget(layout)
@@ -118,8 +117,8 @@ class ProductDetailsScreen(MDScreen):
             product = self.view_model.selected_product
             self.name_label.text = product.name
             self.price_label.text = f"Price: ${product.price:.2f}"
-            self.description_label.text = f"Description: {product.description}"
-            self.quantity_label.text = f"Available: {product.quantity}"
+            self.stock_label.text = f"Stock: {product.stock}"
+            self.reserved_label.text = f"Reserved: {product.reserved}"
 
     def go_back(self, *args):
         self.manager.current = 'product_list'
@@ -129,8 +128,7 @@ class CrossPlatformApp(MDApp):
         self.theme_cls.primary_palette = "Blue"
         self.theme_cls.theme_style = "Light"
 
-        product_service = ProductService()
-        view_model = ProductViewModel(product_service)
+        view_model = ProductViewModel()
 
         product_list = ProductListScreen(view_model, name='product_list')
         product_details = ProductDetailsScreen(view_model, name='product_details')
