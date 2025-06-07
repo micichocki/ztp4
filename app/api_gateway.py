@@ -22,30 +22,6 @@ app.add_middleware(
 
 API_ENDPOINT = os.getenv("API_ENDPOINT", "http://127.0.0.1:5000").rstrip('/')
 
-
-@app.options("/products")
-async def options_products():
-    try:
-        response = requests.options(
-            f"{API_ENDPOINT}/products",
-            timeout=10
-        )
-        response.raise_for_status()
-
-        allowed_methods = response.headers.get("Allow", "GET, OPTIONS")
-
-        return {
-            "allowed_methods": allowed_methods,
-            "endpoints": {
-                "get_all_products": f"{API_ENDPOINT}/products",
-                "get_product_by_id": f"{API_ENDPOINT}/products/{{product_id}}"
-            }
-        }
-    except requests.Timeout:
-        raise HTTPException(status_code=504, detail="Gateway timeout")
-    except requests.RequestException as e:
-        raise HTTPException(status_code=503, detail=f"Service unavailable: {str(e)}")
-
 @app.get("/products/")
 async def get_products():
     try:
@@ -82,31 +58,6 @@ async def get_product(product_id: int):
     except requests.RequestException as e:
         raise HTTPException(status_code=503, detail=f"Service unavailable: {str(e)}")
 
-# Health check endpoint
-@app.get("/health")
-async def health_check():
-    try:
-        response = requests.get(f"{API_ENDPOINT}/health", timeout=5)
-        response_data = response.json()
-        backend_status = "healthy" if response.status_code == 200 else "unhealthy"
-        backend_info = {
-            "status": backend_status,
-            "service": response_data.get("service", "unknown"),
-            "timestamp": response_data.get("timestamp")
-        }
-    except Exception as e:
-        backend_status = "unavailable"
-        backend_info = {
-            "status": backend_status,
-            "error": str(e)
-        }
-
-    return {
-        "status": "healthy",
-        "timestamp": datetime.now().isoformat(),
-        "backend_status": backend_status,
-        "backend_info": backend_info
-    }
 
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
